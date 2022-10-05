@@ -1,0 +1,66 @@
+{% extends 'base.html' %} 
+
+{% block content %} 
+
+<div class="shadow p-3 mb-5 bg-body rounded">
+    <div class="d-grid gap-3">
+        <h4> Target: {{ devicetokendetails.targets[0].email }} </h4>
+        <div> 
+            <strong> User Code: </strong> 
+            {{ devicetokendetails.user_code }} 
+        </div>
+        <div style="word-break: break-all;"> 
+            <strong> Device Code: </strong> 
+            {{ devicetokendetails.device_code }} 
+        </div>
+        <div> 
+            <strong> Issued At: </strong> 
+            {{ devicetokendetails.issued_at|datetimeformat}} 
+        </div>       
+        {% if devicetokendetails.expired == True %}
+            <div>
+                <strong>Expired At: </strong> 
+                {{ devicetokendetails.usercode_lifespan|datetimeformat }} 
+            </div>
+        {% else %}
+            <div>
+                <strong>Valid Until: </strong> 
+                {{ devicetokendetails.usercode_lifespan|datetimeformat }} 
+            </div>
+        {% endif %}
+        <hr>
+        <div> 
+            <strong> Authentication Status: </strong>
+            {% if devicetokendetails.auth_status == 'authenticated' %}
+                <span class="badge rounded-pill text-bg-success"> {{ devicetokendetails.auth_status }}  </span>
+            {% elif (devicetokendetails.auth_status == 'pending') and (devicetokendetails.expired == True) %}
+                <span class="badge rounded-pill text-bg-danger"> expired without being authenticated </span>
+            {% else %}
+                <span class="badge rounded-pill text-bg-secondary"> {{ devicetokendetails.auth_status }}  </span>
+            {% endif %}
+        </div>
+        {% if uiconfig.showusercodeauthrefresh %}
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <a href="{{ url_for('checkauth_devicetoken', id=devicetokendetails.id) }}" class="btn btn-success btn-sm me-2"> 
+                <i class="bi bi-arrow-clockwise"></i>
+                Refresh 
+            </a>
+        </form>
+        {% endif %}
+        <div> 
+            <strong> Scope: </strong> 
+            {{ devicetokendetails.auth_scope }} 
+        </div>
+        <div style="word-break: break-all;">  
+            <strong> Access Token: </strong> 
+            {{ devicetokendetails.auth_access_token }} 
+        </div>
+        <div style="word-break: break-all;">  
+            <strong> Refresh Token: </strong> 
+            {{ devicetokendetails.auth_refresh_token }} 
+        </div>
+    </div>
+</div>
+
+{% endblock %}

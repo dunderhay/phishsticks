@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} Sender Profiles {% endblock %}</h1>
+<hr>
+<a href="{{ url_for('add_senderprofile') }}" class="btn btn-success"> 
+    <i class="bi bi-plus-circle-fill me-1"></i>
+    New Sender Profile 
+</a>
+<br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-2">
+            Profile Name
+        </div>
+        <div class="col-3">
+            Server
+        </div>
+        <div class="col-3">
+            Date Created
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+<hr>
+
+{% for senderprofile in senderprofiles %} 
+<div class="container">
+    <div class="row mt-3 d-flex align-items-center justify-content-center">
+        <div class="col-2 text-truncate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ senderprofile.name }}">
+            {{ senderprofile.name }}
+        </div>
+        <div class="col-3 text-truncate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ senderprofile.mail_host }}">
+            {{ senderprofile.mail_host }}
+        </div>
+        <div class="col-3">
+            {{ senderprofile.date_added|datetimeformat}}
+        </div>
+        <div class="col d-flex justify-content-end">
+            <button type="button" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#sendTestEmail{{ senderprofile.id }}">
+                <i class="bi bi-send me-1"></i>
+                Test Email
+            </button>
+            <a href="{{ url_for('edit_senderprofile', id=senderprofile.id) }}" class="btn btn-warning btn-sm me-2"> 
+                <i class="bi bi-pencil-square me-1"></i>
+                Edit 
+            </a>
+            <a href="{{ url_for('delete_senderprofile', id=senderprofile.id) }}" class="btn btn-danger btn-sm me-2"> 
+                <i class="bi bi-trash me-1"></i>
+                Delete 
+            </a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+{% for senderprofile in senderprofiles %} 
+<div class="modal fade" id="sendTestEmail{{ senderprofile.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="sendTestEmailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="sendTestEmailLabel">Send Test Email</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{{ url_for('send_test_email', id=senderprofile.id) }}" method="POST">
+            {{ form.csrf_token }}
+            <div class="modal-body">
+                    <div class="mb-3">
+                    {{ form.recipient.label(class="form-label") }}
+                    {{ form.recipient(class="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                    {{ form.message.label(class="form-label") }}
+                    {{ form.message(class="form-control") }}
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                {{ form.submit(class="btn btn-success") }}
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

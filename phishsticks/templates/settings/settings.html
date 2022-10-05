@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} Settings {% endblock %}</h1>
+<hr>
+
+<div class="container" style="margin-top: 10px;">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" data-bs-toggle="tab" href="#account"> Account </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#ui"> User Interface </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="tab" href="#devicetokenconfig"> Device Token Config </a>
+    </li>
+  </ul>
+  
+  <div class="tab-content">
+    <div class="tab-pane container active" id="account">
+      <br>
+      <h4>Operator Details</h4>
+      <br>
+      <!-- todo: fix this -->
+      <form action="{{ url_for('edit_current_operator') }}" method="POST">
+          {{ operator_form.csrf_token }}
+          <div class="mb-3">
+            {{ operator_form.username.label(class="form-label") }}
+            {{ operator_form.username(class="form-control", value=current_operator.username) }}
+          </div>
+          <div class="mb-3">
+            {{ operator_form.current_password.label(class="form-label") }}
+            {{ operator_form.current_password(class="form-control") }}
+          </div>
+          <div class="mb-3">
+            {{ operator_form.password.label(class="form-label") }}
+            {{ operator_form.password(class="form-control") }}
+          </div>
+          <div class="mb-3">
+            {{ operator_form.confirm_password.label(class="form-label") }}
+            {{ operator_form.confirm_password(class="form-control") }}
+          </div>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            {{ operator_form.submit(class="btn btn-success") }}
+          </div>
+      </form>
+    </div>
+
+
+    <div class="tab-pane container fade" id="ui">
+      <br>
+      <h4>User Interface</h4>
+      <br>
+      <p>Version: {{ app_version }} </p>
+      <br>
+      <form action="{{ url_for('edit_ui_config') }}" method="POST">
+        {{ uiconfig_form.csrf_token }}
+        <div class="form-check form-switch mb-2">
+          {{ uiconfig_form.showexpiredcodes.label }} 
+          <input class="form-check-input" name="showexpiredswitch" type="checkbox" {{ "checked" if uiconfig.showexpiredcodes else "" }} >
+        </div>
+        <div class="form-check form-switch mb-2">
+          {{ uiconfig_form.showusercodeauthrefresh.label }} 
+          <input class="form-check-input" name="showusercodeauthrefresh" type="checkbox" {{ "checked" if uiconfig.showusercodeauthrefresh else "" }} >
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          {{ uiconfig_form.submit(class="btn btn-success") }}
+        </div>
+      </form>
+    </div>
+    
+
+    
+    <div class="tab-pane container fade" id="devicetokenconfig">
+      <br>
+      <h4>Device Token Configuration</h4>
+      <br>
+      <!-- todo: fix this -->
+      <form action="{{ url_for('edit_devicetoken_config') }}" method="POST">
+        {{ devicetokenconfig_form.csrf_token }}
+        <div class="mb-3">
+          {{ devicetokenconfig_form.client_id.label(class="form-label") }}
+          {{ devicetokenconfig_form.client_id(class="form-control", value=devicetokenconfig.client_id) }}
+        </div>
+        <div class="mb-3">
+          {{ devicetokenconfig_form.resource.label(class="form-label") }}
+          {{ devicetokenconfig_form.resource(class="form-control", value=devicetokenconfig.resource) }}
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          {{ devicetokenconfig_form.submit(class="btn btn-success") }}
+        </div>
+    </form>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} Targets {% endblock %}</h1>
+<hr>
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createGroup">
+    <i class="bi bi-plus-circle-fill me-1"></i>
+    New Target Group
+</button>
+<br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-2">
+            Group Name
+        </div>
+        <div class="col-3">
+            Date Created
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+<hr>
+{% for group in groups %} 
+<div class="container">
+    <div class="row mt-3 d-flex align-items-center justify-content-center">
+        <div class="col-2 text-truncate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ group.name }}">
+            {{ group.name }}
+        </div>
+        <div class="col-3">
+            {{ group.date_added|datetimeformat }}
+        </div>
+        <div class="col d-flex justify-content-end">
+            <a href="{{ url_for('edit_group', id=group.id) }}" class="btn btn-warning btn-sm me-2"> 
+                <i class="bi bi-pencil-square me-1"></i>
+                Edit 
+            </a>
+            <a href="{{ url_for('delete_group', id=group.id) }}" class="btn btn-danger btn-sm me-2"> 
+                <i class="bi bi-trash me-1"></i>
+                Delete 
+            </a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="modal fade" id="createGroup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createGroupLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createGroupLabel">New Target Group</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('add_group') }}" method="POST">
+                    {{ group_form.csrf_token }}
+                    {{ group_form.name.label(class="form-label") }}
+                    {{ group_form.name(class="form-control") }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                {{ group_form.submit(class="btn btn-success") }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

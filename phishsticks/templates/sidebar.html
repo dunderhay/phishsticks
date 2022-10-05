@@ -1,0 +1,46 @@
+<div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark" style="width: 245px;">
+  <div class="d-flex flex-column align-items-center align-items-sm-start px-1 pt-1 text-white min-vh-100">  <ul class="nav nav-pills flex-column mb-auto">
+    <li class="nav-item">
+      <a href="{{ url_for('dashboard')}}" class="nav-link text-white"> 
+        <i class="bi bi-speedometer me-1"></i>
+        Dashboard 
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('campaigns')}}" class="nav-link text-white"> 
+        <i class="bi bi-play-fill me-1"></i>
+        Campaigns 
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('targets')}}" class="nav-link text-white"> 
+        <i class="bi bi-bullseye me-1"></i>
+        Targets 
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('emailtemplates')}}" class="nav-link text-white"> 
+        <i class="bi bi-envelope me-1"></i>
+        Email Templates 
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('senderprofile')}}" class="nav-link text-white"> 
+        <i class="bi bi-mailbox me-1"></i>
+        Sender Profiles 
+      </a>
+    </li>
+    <li> 
+      <a href="{{ url_for('settings')}}" class="nav-link text-white"> 
+        <i class="bi bi-gear me-1"></i>
+        Settings 
+      </a>
+    </li>
+    <li>
+      <a href="{{ url_for('operators')}}" class="nav-link text-white"> 
+        <i class="bi bi-people me-1"></i>
+        Operator Management 
+      </a>
+    </li>
+  </div>
+</div>

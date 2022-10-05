@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} Campaigns {% endblock %}</h1>
+<hr>
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createCampaign">
+    <i class="bi bi-plus-circle-fill me-1"></i>
+    New Campaign
+</button>
+<br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-2">
+            Campaign Name
+        </div>
+        <div class="col-3">
+            Date Created
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+<hr>
+{% for campaign in campaigns %} 
+<div class="container">
+    <div class="row mt-3 d-flex align-items-center justify-content-center">
+        <div class="col-2 text-truncate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ campaign.name }}">
+            {{ campaign.name }}
+        </div>
+        <div class="col-3">
+            {{ campaign.date_added|datetimeformat }}
+        </div>
+        <div class="col d-flex justify-content-end">
+            <a href="{{ url_for('start_campaign', id=campaign.id) }}" class="btn btn-primary btn-sm me-2"> 
+                <i class="bi bi-play-btn me-1"></i>
+                Start Campaign 
+            </a>
+            <a href="{{ url_for('edit_campaign', id=campaign.id) }}" class="btn btn-warning btn-sm me-2"> 
+                <i class="bi bi-pencil-square me-1"></i>
+                Edit 
+            </a>
+            <a href="{{ url_for('delete_campaign', id=campaign.id) }}" class="btn btn-danger btn-sm me-2"> 
+                <i class="bi bi-trash me-1"></i>
+                Delete 
+            </a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<div class="modal fade" id="createCampaign" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createCampaignLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createCampaignLabel">New Campaign</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('add_campaign') }}" method="POST">
+              {{ form.csrf_token }}
+              <div class="modal-body">
+                <div class="mb-3">
+                    {{ form.campaignname.label(class="form-label") }}
+                    {{ form.campaignname(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.campaigntemplate.label(class="form-label") }}
+                    <select class="form-select" name="emailtemplateoption">
+                    {% for emailtemplate in emailtemplates %}
+                        <option value="{{ emailtemplate.id }}">{{ emailtemplate.name }}</option>
+                    {% endfor %}     
+                    </select>
+                </div>
+                <div class="mb-3">
+                    {{ form.campaignsenderprofile.label(class="form-label") }}
+                    <select class="form-select" name="senderprofileoption">
+                    {% for senderprofile in senderprofiles %}
+                        <option value="{{ senderprofile.id }}">{{ senderprofile.name }}</option>
+                    {% endfor %}     
+                    </select>
+                </div>
+                <div class="mb-3">
+                    {{ form.campaignvictims.label(class="form-label") }}
+                    <select class="form-select" name="targetgroupoption">
+                    {% for targetgroup in targetgroups %}
+                        <option value="{{ targetgroup.id }}">{{ targetgroup.name }}</option>
+                    {% endfor %}     
+                    </select>
+                </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  {{ form.submit(class="btn btn-success") }}
+              </div>
+          </form>
+        </div>
+    </div>
+  </div>
+  
+
+
+{% endblock %}

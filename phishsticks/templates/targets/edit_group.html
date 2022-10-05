@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} Editing Group - {{ group_to_update.name }} {% endblock %}</h1>
+<hr>
+<br>
+<form class="form-inline center-block" action="{{ url_for('upload_targets', id=group_to_update.id) }}" method="POST" enctype="multipart/form-data">
+    {{ upload_form.csrf_token() }}
+    <div class="row mb-3">
+        <div class="col-4">
+            {{ upload_form.input_file(class="form-control", id="formFile") }}
+        </div>
+        <div class="col-2">
+            {{ upload_form.submit(class="btn btn-success") }}
+        </div>
+    </div>
+    {% if upload_form.input_file.errors %}
+        <ul class="errors">
+        {% for error in upload_form.input_file.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</form>
+<br>
+<form action="{{ url_for('add_target_to_group', id=group_to_update.id) }}" method="POST">
+    {{ target_form.csrf_token }}
+    <div class="row mb-3">
+        <div class="col-2">
+            {{ target_form.firstname(class="form-control") }}
+        </div>
+        <div class="col-2">
+            {{ target_form.lastname(class="form-control") }}
+        </div>
+        <div class="col-3">
+            {{ target_form.email(class="form-control") }}
+            {% if target_form.email.errors %}
+            <ul class="errors">
+            {% for error in target_form.email.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="col-2">
+            {{ target_form.position(class="form-control") }}
+        </div>
+        <div class="col-1">
+            {{ target_form.submit(class="btn btn-success") }}
+        </div>
+    </div>
+</form>
+
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-2">
+            First Name
+        </div>
+        <div class="col-2">
+            Last Name
+        </div>
+        <div class="col-3">
+            Email
+        </div>
+        <div class="col-2">
+            Position
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+<hr>
+{% for target in targets %} 
+<div class="container">
+    <div class="row mt-3 d-flex align-items-center justify-content-center">
+        <div class="col-2 text-truncate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ target.first_name }}">
+            {{ target.first_name }}
+        </div>
+        <div class="col-2 text-truncate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ target.last_name }}">
+            {{ target.last_name }}
+        </div>
+        <div class="col-3 text-truncate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ target.email }}">
+            {{ target.email }}
+        </div>
+        <div class="col-2 text-truncate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ target.position }}">
+            {{ target.position }}
+        </div>
+        <div class="col d-flex justify-content-end">
+            <button type="button" class="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editTarget{{ target.id }}">
+                <i class="bi bi-pencil-square me-1"></i>
+                Edit
+            </button>
+            <a href="{{ url_for('delete_target', id=target.id) }}" class="btn btn-danger btn-sm me-2"> 
+                <i class="bi bi-trash me-1"></i>
+                Delete 
+            </a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+{% for target in targets %} 
+<div class="modal fade" id="editTarget{{ target.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editTargetLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editTargetLabel">Edit Target</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('edit_target', id=target.id) }}" method="POST">
+                {{ update_target_form.csrf_token }}
+                <div class="modal-body">
+                        <div class="mb-3">
+                            {{ update_target_form.firstname.label(class="form-label") }}
+                            {{ update_target_form.firstname(class="form-control", value=target.first_name) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ update_target_form.lastname.label(class="form-label") }}
+                            {{ update_target_form.lastname(class="form-control", value=target.last_name) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ update_target_form.email.label(class="form-label") }}
+                            {{ update_target_form.email(class="form-control", value=target.email) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ update_target_form.position.label(class="form-label") }}
+                            {{ update_target_form.position(class="form-control", value=target.position) }}
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard</button>
+                    {{ update_target_form.submit(class="btn btn-success", value="Save Changes") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

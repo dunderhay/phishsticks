@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} Edit Email Template {% endblock %}</h1>
+<hr>
+
+<div class="shadow p-3 mb-5 bg-body rounded">
+    <form action="{{ url_for('edit_emailtemplate', id=emailtemplate_to_update.id) }}" method="POST">
+        {{ form.csrf_token }}
+        <div class="mb-3">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control", value=emailtemplate_to_update.name) }}
+        </div>
+        <div class="mb-3">
+            {{ form.subject.label(class="form-label") }}
+            {{ form.subject(class="form-control", value=emailtemplate_to_update.subject) }}
+        </div>
+        <div class="mb-3">
+            {{ form.body(value=emailtemplate_to_update.body) }}
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            {{ form.submit(class="btn btn-success") }}
+        </div>
+    </form>
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='body') }}
+</div>
+
+{% endblock %}

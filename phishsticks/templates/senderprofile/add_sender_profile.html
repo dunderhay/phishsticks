@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} New Sender Profile {% endblock %}</h1>
+<hr>
+<div class="shadow p-3 mb-5 bg-body rounded">
+    <div class="container">
+        <form action="{{ url_for('add_senderprofile') }}" method="POST">
+            {{ form.csrf_token }}
+            <div class="mb-3">
+                {{ form.name.label(class="form-label") }}
+                {{ form.name(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.mailprofiledefaultsender.label(class="form-label") }}
+                {{ form.mailprofiledefaultsender(class="form-control") }}
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    {{ form.mailprofilehost.label(class="form-label") }}
+                    {{ form.mailprofilehost(class="form-control") }}
+                </div>
+                <div class="col">
+                    {{ form.mailprofileport.label(class="form-label") }}
+                    {{ form.mailprofileport(class="form-control") }}
+                </div>
+            </div>
+            <div class="mb-3">
+                {{ form.mailprofileusername.label(class="form-label") }}
+                {{ form.mailprofileusername(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.mailprofilepassword.label(class="form-label") }}
+                {{ form.mailprofilepassword(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                <input type="radio" class="btn-check" name="transportsecurity" value="usetls" id="usetls" autocomplete="off" checked >
+                <label class="btn btn-outline-success me-2 mb-3" for="usetls">Use TLS</label>
+                <input type="radio" class="btn-check" name="transportsecurity" value="usessl" id="usessl" autocomplete="off" >
+                <label class="btn btn-outline-warning me-2 mb-3" for="usessl">Use SSL</label>
+                <input type="radio" class="btn-check" name="transportsecurity" value="notls" id="notls" autocomplete="off" >
+                <label class="btn btn-outline-danger me-2 mb-3" for="notls">Plaintext (insecure)</label>
+            </div>
+            <hr>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                {{ form.submit(class="btn btn-success") }}      
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

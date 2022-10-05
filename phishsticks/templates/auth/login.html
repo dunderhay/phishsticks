@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid vh-100" style="margin-top:100px">
+    <div class="rounded d-flex justify-content-center">
+        <div class="col-md-4 col-sm-12 shadow-lg pb-2 p-5 bg-light">
+            <div class="text-center p-2">
+                <h3>Operator Login</h3>
+            </div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ messages[0] }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+            {% endif %}
+            {% endwith %}
+            <form action="{{ url_for('login') }}" method="POST">
+                {{ form.csrf_token }}
+                <input type="hidden" name="next" value="{{ request.args.get('next', '') }}"/>
+                <div class="p-4">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-secondary">
+                            <i class="bi bi-person-circle text-white"></i>
+                        </span>
+                        {{ form.username(class="form-control") }}
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-secondary">
+                            <i class="bi bi-key-fill text-white"></i>
+                        </span>
+                        {{ form.password(class="form-control") }}
+                    </div>
+                    <div class="pt-3 d-md-flex justify-content-center">
+                    {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

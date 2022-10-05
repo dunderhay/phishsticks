@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} Edit Campaign - {{ campaign_to_update.name }} {% endblock %}</h1>
+<hr>
+<br>
+
+<div class="shadow p-3 mb-5 bg-body rounded">
+    <form action="{{ url_for('edit_campaign', id=campaign_to_update.id) }}" method="POST">
+        {{ form.csrf_token }}
+        <div class="mb-3">
+          {{ form.campaignname.label(class="form-label") }}
+          {{ form.campaignname(class="form-control", value = campaign_to_update.name) }}
+        </div>
+        <div class="mb-3">
+          {{ form.campaigntemplate.label(class="form-label") }}
+          <select class="form-select" name="emailtemplateoption">
+            {% for emailtemplate in emailtemplates %}
+              <option value="{{ emailtemplate.id }}" {{ "selected" if campaign_to_update.emailtemplate_id == emailtemplate.id else "" }}> {{ emailtemplate.name }}</option>
+            {% endfor %}     
+          </select>
+        </div>
+        <div class="mb-3">
+          {{ form.campaignsenderprofile.label(class="form-label") }}
+          <select class="form-select" name="senderprofileoption">
+            {% for senderprofile in senderprofiles %}
+              <option value="{{ senderprofile.id }}" {{ "selected" if campaign_to_update.senderprofile_id == senderprofile.id else "" }}>{{ senderprofile.name }}</option>
+            {% endfor %}     
+          </select>
+        </div>
+        <div class="mb-3">
+          {{ form.campaignvictims.label(class="form-label") }}
+          <select class="form-select" name="targetgroupoption">
+            {% for targetgroup in targetgroups %}
+              <option value="{{ targetgroup.id }}" {{ "selected" if campaign_to_update.group_id == targetgroup.id else "" }}>{{ targetgroup.name }}</option>
+            {% endfor %}     
+          </select>
+        </div>
+        <hr>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            {{ form.submit(class="btn btn-success", value="Save Changes") }}      
+        </div>
+    </form>    
+</div>
+
+
+{% endblock %}

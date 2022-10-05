@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} Email Templates {% endblock %}</h1>
+<hr>
+<a href="{{ url_for('add_emailtemplate') }}" class="btn btn-success"> 
+    <i class="bi bi-plus-circle-fill me-1"></i>
+    New Email Template 
+</a>
+<br><br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-2">
+            Template Name
+        </div>
+        <div class="col">
+            Subject
+        </div>
+        <div class="col-3">
+            Date Created
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+<hr>
+{% for emailtemplate in emailtemplates %} 
+<div class="container">
+    <div class="row mt-3 d-flex align-items-center justify-content-center">
+        <div class="col-2 text-truncate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ emailtemplate.name }}">
+            {{ emailtemplate.name }}
+        </div>
+        <div class="col text-truncate" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ emailtemplate.subject }}">
+            {{ emailtemplate.subject }}
+        </div>
+        <div class="col-3">
+            {{ emailtemplate.date_added|datetimeformat }}
+        </div>
+        <div class="col d-flex justify-content-end">
+            <a href="{{ url_for('edit_emailtemplate', id=emailtemplate.id) }}" class="btn btn-warning btn-sm me-2"> 
+                <i class="bi bi-pencil-square me-1"></i>
+                Edit 
+            </a>
+            <a href="{{ url_for('delete_emailtemplate', id=emailtemplate.id) }}" class="btn btn-danger btn-sm me-2"> 
+                <i class="bi bi-trash me-1"></i>
+                Delete 
+            </a>
+        </div>
+    </div>
+</div>
+{% endfor %} 
+
+{% endblock %}

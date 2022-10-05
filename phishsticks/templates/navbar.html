@@ -1,0 +1,14 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('dashboard') }}">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="width: 80px ; padding: 10px; padding-left: 25px;">
+            Phishsticks 
+        </a>
+        {% if current_user.is_authenticated %}
+        <a class="btn btn-secondary btn-sm me-3" href="{{ url_for('logout') }}" role="button">
+        <i class="bi bi-power me-1"></i>
+        Logout
+        </a>
+        {% endif %}
+    </div>
+</nav>

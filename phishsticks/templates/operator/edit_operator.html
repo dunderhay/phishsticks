@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} Edit Operator - {{ operator_to_update.username }} {% endblock %}</h1>
+<hr>
+<div class="shadow p-3 mb-5 bg-body rounded">
+    <form action="{{ url_for('edit_operator', id=operator_to_update.id) }}" method="POST">
+        {{ form.csrf_token }}
+        {% for field, errors in form.errors.items() %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ ', '.join(errors) }}
+            </div>
+        {% endfor %}
+        <div class="mb-3">
+            {{ form.username.label(class="form-label") }}
+            {{ form.username(class="form-control", value=operator_to_update.username) }}
+        </div>
+        <div class="mb-3">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.confirm_password.label(class="form-label") }}
+            {{ form.confirm_password(class="form-control") }}
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            {{ form.submit(class="btn btn-success", value="Save Changes") }}
+        </div>
+    </form>
+</div>
+
+
+
+{% endblock %}

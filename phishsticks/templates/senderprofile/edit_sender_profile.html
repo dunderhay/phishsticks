@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} Edit Sender Profile {% endblock %}</h1>
+<hr>
+<div class="shadow p-3 mb-5 bg-body rounded">
+    <div class="container">
+        <form action="{{ url_for('edit_senderprofile', id=senderprofile_to_update.id) }}" method="POST">
+            {{ form.csrf_token }}
+            <div class="mb-3">
+                {{ form.name.label(class="form-label") }}
+                {{ form.name(class="form-control", value=senderprofile_to_update.name) }}
+            </div>
+            <div class="mb-3">
+                {{ form.mailprofiledefaultsender.label(class="form-label") }}
+                {{ form.mailprofiledefaultsender(class="form-control", value=senderprofile_to_update.mail_default_sender) }}
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    {{ form.mailprofilehost.label(class="form-label") }}
+                    {{ form.mailprofilehost(class="form-control", value=senderprofile_to_update.mail_host) }}
+                </div>
+                <div class="col">
+                    {{ form.mailprofileport.label(class="form-label") }}
+                    {{ form.mailprofileport(class="form-control", value=senderprofile_to_update.mail_port) }}
+                </div>
+            </div>
+            <div class="mb-3">
+                {{ form.mailprofileusername.label(class="form-label") }}
+                {{ form.mailprofileusername(class="form-control", value=senderprofile_to_update.mail_username) }}
+            </div>
+            <div class="mb-3">
+                {{ form.mailprofilepassword.label(class="form-label") }} <i class="bi bi-eye-slash p-3" id="togglePassword"></i>
+                {{ form.mailprofilepassword(class="form-control", value=senderprofile_to_update.mail_password) }}
+            </div>
+            <div class="mb-3">
+                <input type="radio" class="btn-check" name="transportsecurity" value="usetls" id="usetls" autocomplete="off"  {{ "checked" if senderprofile_to_update.mail_use_tls else "" }}>
+                <label class="btn btn-outline-success me-2 mb-3" for="usetls">Use TLS</label>
+                <input type="radio" class="btn-check" name="transportsecurity" value="usessl" id="usessl" autocomplete="off" {{ "checked" if senderprofile_to_update.mail_use_ssl else "" }}>
+                <label class="btn btn-outline-warning me-2 mb-3" for="usessl">Use SSL</label>
+                <input type="radio" class="btn-check" name="transportsecurity" value="notls" id="notls" autocomplete="off" {{ "checked" if (not senderprofile_to_update.mail_use_tls and not senderprofile_to_update.mail_use_ssl) else "" }}>
+                <label class="btn btn-outline-danger me-2 mb-3" for="notls">Plaintext (insecure)</label>
+            </div>
+            <hr>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                {{ form.submit(class="btn btn-success", value="Save Changes") }}      
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const togglePassword = document.querySelector("#togglePassword");
+    const password = document.querySelector("#mailprofilepassword");
+    togglePassword.addEventListener("click", function () {
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+        this.classList.toggle("bi-eye");
+    });
+</script>
+
+{% endblock %}

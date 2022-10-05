@@ -1,0 +1,87 @@
+{% extends 'base.html' %} 
+
+{% block content %} 
+
+<h1>{% block title %} Operator Management {% endblock %}</h1>
+<hr>
+<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createOperator">
+  <i class="bi bi-plus-circle-fill me-1"></i>
+  New Operator
+</button>
+<br><br>
+
+<div class="container">
+  <div class="row">
+      <div class="col-2">
+        Operator
+      </div>
+      <div class="col-3">
+        Date Created
+      </div>
+      <div class="col"></div>
+  </div>
+</div>
+<hr>
+{% for operator in operators %} 
+<div class="container">
+  <div class="row mt-3 d-flex align-items-center justify-content-center">
+      <div class="col-2">
+        {{ operator.username }}
+      </div>
+      <div class="col-3">
+        {{ operator.date_added|datetimeformat }}
+    </div> 
+      <div class="col d-flex justify-content-end">
+        <a href="{{ url_for('edit_operator', id=operator.id) }}" class="btn btn-warning btn-sm me-2"> 
+          <i class="bi bi-pencil-square me-1"></i>
+          Edit 
+        </a>
+        <a href="{{ url_for('delete_operator', id=operator.id) }}" class="btn btn-danger btn-sm me-2"> 
+          <i class="bi bi-trash me-1"></i>
+          Delete 
+        </a>
+      </div>
+  </div>
+</div>
+{% endfor %} 
+
+<div class="modal fade" id="createOperator" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createOperatorLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="createOperatorLabel">New Operator</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="{{ url_for('add_operator') }}" method="POST">
+            {{ form.csrf_token }}
+            <div class="modal-body">
+              <div class="mb-3">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-control") }}
+              </div>
+              <div class="mb-3">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-control") }}
+              </div>
+              <div class="mb-3">
+                {{ form.confirm_password.label(class="form-label") }}
+                {{ form.confirm_password(class="form-control") }}
+                {% if form.confirm_password.errors %}
+                <ul class="errors">
+                {% for error in form.confirm_password.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+              </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                {{ form.submit(class="btn btn-success") }}
+            </div>
+        </form>
+      </div>
+  </div>
+</div>
+
+{% endblock %}

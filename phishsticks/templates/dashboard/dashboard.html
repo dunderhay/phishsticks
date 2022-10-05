@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{% block title %} Dashboard {% endblock %}</h1>
+<hr>
+<br> 
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {% for devicetoken in devicetokens %} 
+  <div class="col mb-2">
+    {% if devicetoken.expired == True and devicetoken.auth_status == 'pending' %}
+    <div class="card text-white bg-danger mb-2" style="max-width: 22rem;">
+    {% elif (devicetoken.expired == True or devicetoken.expired == False) and devicetoken.auth_status == 'authenticated' %}
+    <div class="card text-white bg-success mb-2" style="max-width: 22rem;">
+    {% else %}
+    <div class="card text-white bg-secondary mb-2" style="max-width: 22rem;">
+    {% endif %}
+    <a href="{{ url_for('view_devicetoken', id=devicetoken.id) }}" class="stretched-link"></a>
+    <div class="card-header ms-1"><strong> 
+      Target: {{ devicetoken.targets[0].email }} </strong>
+    </div>
+      <div class="card-body">
+        <p class="card-text m-1"><strong> User Code: </strong> {{ devicetoken.user_code }} </p>
+        {% if devicetoken.expired == True %}
+        <p class="card-text m-1"><strong>Expired at: </strong> {{ devicetoken.usercode_lifespan|datetimeformat }} </p>
+        {% else %}
+        <p class="card-text m-1"><strong>Valid Until: </strong> {{ devicetoken.usercode_lifespan|datetimeformat }} </p>
+        {% endif %}
+        <p class="card-text m-1"><strong>Auth: </strong> 
+          {% if devicetoken.auth_status == 'authenticated' %}
+              {{ devicetoken.auth_status }}
+          {% elif (devicetoken.auth_status == 'pending') and (devicetoken.expired == True) %}
+              expired & unauthd
+          {% else %}
+              {{ devicetoken.auth_status }}
+          {% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endfor %} 
+</div>
+
+{% endblock %}
