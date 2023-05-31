@@ -2,8 +2,6 @@
 
 ![Version: 0.0.3-dev](https://img.shields.io/badge/version-0.0.3--dev-blue)
 
-![image](phishsticks/static/images/logo.png)
-
 A phishing framework for OAuth 2.0 device code authentication grant flow
 
 # Getting Started
